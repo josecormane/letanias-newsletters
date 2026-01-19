@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evangelio Diario | Letanías Digital</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #008b8b;
+            --primary-dark: #006666;
+            --secondary: #d4af37;
+            --accent: #b22222;
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --text-main: #1a2a3a;
+            --text-light: #5a6c7d;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+            background-image: radial-gradient(at 0% 0%, rgba(0, 139, 139, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.05) 0px, transparent 50%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #004d4d, #008b8b);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 15s infinite linear;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo {
+            max-width: 220px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 10;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        /* Monthly Sections */
+        .month-section {
+            margin-bottom: 40px;
+        }
+
+        .month-header {
+            background: var(--bg-card);
+            padding: 25px 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border-left: 6px solid var(--primary);
+        }
+
+        .month-header:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .month-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary-dark);
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .month-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+            display: none;
+            perspective: 1000px;
+        }
+
+        .month-section.active .month-content {
+            display: grid;
+        }
+
+        .month-section.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Day Card */
+        .day-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .day-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .day-date {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .day-date::after {
+            content: '';
+            height: 1px;
+            background: var(--secondary);
+            flex-grow: 1;
+            opacity: 0.3;
+        }
+
+        .day-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            color: var(--text-main);
+            min-height: 2.6em;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .day-ref {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 25px;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Square Video Container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            /* 1:1 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            background: #000;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5), var(--shadow-sm);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* WhatsApp Share Section */
+        .share-box {
+            background: #f8f9fa;
+            border: 1px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .share-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4a5568;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .share-text {
+            font-size: 0.9rem;
+            color: #2d3748;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #edf2f7;
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-whatsapp:hover {
+            background: #1eb956;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-download {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-download:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-text {
+            background: transparent;
+            color: var(--primary);
+            font-size: 0.9rem;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        .btn-text:hover {
+            text-decoration: underline;
+        }
+
+        /* Gospel Text */
+        .gospel-text-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: #fffdf7;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            color: #4a5568;
+            border-left: 4px solid var(--secondary);
+            margin-bottom: 0;
+        }
+
+        .gospel-text-wrapper.open {
+            max-height: 1000px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        /* Notification */
+        #notification {
+            position: fixed;
+            top: 20px;
+            /* Moved to top for better visibility */
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #25d366;
+            /* Success green */
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid white;
+        }
+
+        #notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #notification .icon {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            header {
+                padding: 60px 20px;
+            }
+
+            .month-content {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                max-width: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="https://cdn.shopify.com/s/files/1/0709/1388/4380/files/LETANIAS_DIGITAL_SIN_FONDO_-_white_copy.png?v=1768835797"
+            alt="Letanías Digital" class="logo">
+        <h1>Evangelio Diario</h1>
+        <p>Belleza y Verdad para tu camino espiritual</p>
+    </header>
+
+    <div class="container" id="dashboard">
+        <!-- Dashboard content injected by JS -->
+        <div style="text-align: center; padding: 100px;">
+            <p>Preparando los evangelios para ti...</p>
+        </div>
+    </div>
+
+    <div id="notification">
+        <span class="icon">🌹</span>
+        <span>Copiado al portapapeles</span>
+    </div>
+
+    <script>
+        const DATA_URL = 'evangelios_data.json';
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(DATA_URL);
+                if (!response.ok) throw new Error('No se pudo cargar la data');
+                const data = await response.json();
+                renderDashboard(data);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('dashboard').innerHTML = `
+                    <div style="text-align:center; padding: 50px; background:white; border-radius:20px;">
+                        <p style="color:var(--accent); font-weight:700;">Oops! No pudimos cargar el dashboard.</p>
+                        <p style="font-size:0.9rem; color:#666; margin-top:10px;">${error.message}</p>
+                    </div>`;
+            }
+        }
+
+        function renderDashboard(data) {
+            const dashboard = document.getElementById('dashboard');
+            dashboard.innerHTML = '';
+
+            const years = Object.keys(data).sort().reverse();
+
+            years.forEach(year => {
+                const months = Object.keys(data[year]).sort().reverse();
+
+                months.forEach(month => {
+                    const monthData = data[year][month];
+                    const section = document.createElement('div');
+                    section.className = 'month-section active';
+
+                    section.innerHTML = `
+                        <div class="month-header">
+                            <h2>${monthData.name} ${year}</h2>
+                            <span class="toggle-icon">▼</span>
+                        </div>
+                        <div class="month-content"></div>
+                    `;
+
+                    const header = section.querySelector('.month-header');
+                    header.onclick = () => section.classList.toggle('active');
+
+                    const content = section.querySelector('.month-content');
+                    const days = Object.keys(monthData.days).sort().reverse();
+
+                    days.forEach(dayKey => {
+                        const day = monthData.days[dayKey];
+                        const card = createDayCard(dayKey, day);
+                        content.appendChild(card);
+                    });
+
+                    dashboard.appendChild(section);
+                });
+            });
+        }
+
+        function createDayCard(dayKey, day) {
+            const card = document.createElement('div');
+            card.className = 'day-card';
+
+            const dateObj = new Date(day.date);
+            const formattedDate = dateObj.toLocaleDateString('es-ES', {
+                weekday: 'long', day: 'numeric', month: 'long'
+            });
+
+            const shareText = `${day.whatsapp_intro}`; // Removed video URL as per request
+
+            card.innerHTML = `
+                <div class="day-date">📅 ${formattedDate}</div>
+                <div class="day-title">${day.title}</div>
+                <div class="day-ref">📖 ${day.ref}</div>
+                
+                <button class="btn btn-text toggle-gospel-btn">Leer Evangelio completo</button>
+                <div class="gospel-text-wrapper">
+                    ${day.text.replace(/\n/g, '<br>')}
+                </div>
+
+                ${day.video_url ? `
+                <div class="video-container">
+                    <video controls preload="none">
+                        <source src="${day.video_url}" type="video/mp4">
+                        Tu navegador no soporta video.
+                    </video>
+                </div>
+                ` : `
+                <div class="video-container" style="display:flex; flex-direction:column; align-items:center; justify-content:center; color:#666; background:#e2e8f0; height:auto;">
+                    <span style="font-size:3rem; margin-bottom:10px;">⏳</span>
+                    <p style="font-size:0.85rem; font-weight:600;">Video en preparación</p>
+                </div>
+                `}
+
+                <div class="share-box">
+                    <span class="share-label">Texto para compartir</span>
+                    <div class="share-text" id="share-text-${dayKey}">${shareText}</div>
+                    <button class="btn btn-whatsapp" onclick="copyByElementId('share-text-${dayKey}')">
+                        <span>📋 Copiar texto de WhatsApp</span>
+                    </button>
+                </div>
+
+                <div class="actions">
+                    ${day.video_url ? `
+                        <button class="btn btn-download" onclick="downloadVideo('${day.video_url}', '${dayKey}-evangelio.mp4')">
+                            <span>⬇️ Descargar Video</span>
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+
+            // Setup internal toggle
+            const toggleBtn = card.querySelector('.toggle-gospel-btn');
+            const wrapper = card.querySelector('.gospel-text-wrapper');
+            toggleBtn.onclick = () => {
+                const isOpen = wrapper.classList.toggle('open');
+                toggleBtn.innerText = isOpen ? 'Ocultar texto' : 'Leer Evangelio completo';
+            };
+
+            return card;
+        }
+
+        function copyByElementId(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                copyToClipboard(element.innerText || element.textContent);
+            }
+        }
+
+        function copyToClipboard(text) {
+            const handleSuccess = () => showNotification('✅ ¡Copiado con éxito! 🌹');
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(handleSuccess);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    handleSuccess();
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                    showNotification('❌ Error al copiar');
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        async function downloadVideo(url, filename) {
+            // Show start notification
+            showNotification('⏳ Iniciando descarga...');
+
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
+
+                showNotification('✅ Video descargado con éxito 🌹');
+            } catch (error) {
+                console.error('Download error:', error);
+                // Fallback: open in new tab if fetch fails (e.g. CORS issues)
+                window.open(url, '_blank');
+                showNotification('⚠️ Descarga iniciada en nueva pestaña');
+            }
+        }
+
+        function showNotification(message) {
+            const note = document.getElementById('notification');
+            note.querySelector('span:last-child').innerText = message;
+            note.classList.add('show');
+            setTimeout(() => {
+                note.classList.remove('show');
+            }, 3000);
+        }
+
+        loadDashboard();
+    </script>
+
+</body>
+
+</html>
