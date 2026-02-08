@@ -489,7 +489,9 @@
             const card = document.createElement('div');
             card.className = 'day-card';
 
-            const dateObj = new Date(day.date);
+            // "YYYY-MM-DD" es interpretado como UTC por new Date(), lo que causa saltos de día.
+            // Reemplazar guiones por barras ("YYYY/MM/DD") hace que se trate como hora local.
+            const dateObj = new Date(day.date.replace(/-/g, '/'));
             const formattedDate = dateObj.toLocaleDateString('es-ES', {
                 weekday: 'long', day: 'numeric', month: 'long'
             });
