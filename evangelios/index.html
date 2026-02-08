@@ -108,56 +108,89 @@
             padding: 0 25px;
         }
 
-        /* Monthly Sections */
-        .month-section {
-            margin-bottom: 40px;
-        }
-
-        .month-header {
-            background: var(--bg-card);
-            padding: 25px 40px;
-            border-radius: var(--radius-md);
+        /* Tabs */
+        .month-tabs {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid transparent;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--text-light);
             cursor: pointer;
-            box-shadow: var(--shadow-md);
             transition: var(--transition);
-            border-left: 6px solid var(--primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
         }
 
-        .month-header:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .month-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--primary-dark);
-        }
-
-        .toggle-icon {
-            font-size: 1.5rem;
+        .tab-btn:hover {
+            background: white;
             color: var(--primary);
-            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
 
-        .month-content {
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        /* Month Content */
+        .month-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .month-container.active {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 30px;
-            margin-top: 30px;
-            display: none;
-            perspective: 1000px;
         }
 
-        .month-section.active .month-content {
-            display: grid;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .month-section.active .toggle-icon {
-            transform: rotate(180deg);
+        /* Today Highlight */
+        .day-card.today {
+            border: 2px solid var(--secondary);
+            background: #fffdf5;
+            /* Light gold tint */
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 5;
+        }
+
+        .day-card.today::before {
+            content: 'HOY';
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-sm);
         }
 
         /* Day Card */
@@ -450,56 +483,153 @@
             const dashboard = document.getElementById('dashboard');
             dashboard.innerHTML = '';
 
-            const years = Object.keys(data).sort().reverse();
+            // 1. Flatten data into a list of month objects for easier handling
+            const allMonths = [];
 
-            years.forEach(year => {
-                const months = Object.keys(data[year]).sort().reverse();
-
-                months.forEach(month => {
-                    const monthData = data[year][month];
-                    const section = document.createElement('div');
-                    section.className = 'month-section active';
-
-                    section.innerHTML = `
-                        <div class="month-header">
-                            <h2>${monthData.name} ${year}</h2>
-                            <span class="toggle-icon">▼</span>
-                        </div>
-                        <div class="month-content"></div>
-                    `;
-
-                    const header = section.querySelector('.month-header');
-                    header.onclick = () => section.classList.toggle('active');
-
-                    const content = section.querySelector('.month-content');
-                    const days = Object.keys(monthData.days).sort().reverse();
-
-                    days.forEach(dayKey => {
-                        const day = monthData.days[dayKey];
-                        const card = createDayCard(dayKey, day);
-                        content.appendChild(card);
+            // Iterate years descending
+            Object.keys(data).sort().reverse().forEach(year => {
+                // Iterate months descending within year
+                Object.keys(data[year]).sort().reverse().forEach(monthKey => {
+                    allMonths.push({
+                        id: `${year}-${monthKey}`, // Unique ID for tab
+                        label: `${data[year][monthKey].name} ${year}`,
+                        days: data[year][monthKey].days
                     });
-
-                    dashboard.appendChild(section);
                 });
             });
+
+            if (allMonths.length === 0) {
+                dashboard.innerHTML = '<p style="text-align:center">No hay datos disponibles</p>';
+                return;
+            }
+
+            // 2. Determine "Today" and Initial Active Tab
+            const today = new Date();
+            // Local YYYY-MM-DD
+            const yearStr = today.getFullYear();
+            const monthStr = String(today.getMonth() + 1).padStart(2, '0');
+            const dayStr = String(today.getDate()).padStart(2, '0');
+            const todayKey = dayStr;
+            const currentMonthId = `${yearStr}-${monthStr}`;
+
+            // Check if today belongs to one of our data months
+            let activeMonthId = allMonths[0].id; // Default to latest
+            if (allMonths.some(m => m.id === currentMonthId)) {
+                activeMonthId = currentMonthId;
+            }
+
+            // 3. Render Tabs
+            const tabsContainer = document.createElement('div');
+            tabsContainer.className = 'month-tabs';
+
+            allMonths.forEach(month => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${month.id === activeMonthId ? 'active' : ''}`;
+                btn.innerText = month.label;
+                btn.dataset.id = month.id;
+                btn.onclick = () => switchTab(month.id);
+                tabsContainer.appendChild(btn);
+            });
+            dashboard.appendChild(tabsContainer);
+
+            // 4. Render Content Containers (one per month)
+            allMonths.forEach(month => {
+                const container = document.createElement('div');
+                container.id = `month-${month.id}`;
+                container.className = `month-container ${month.id === activeMonthId ? 'active' : ''}`;
+
+                // Sort days ASCENDING (1 -> 31)
+                const sortedDays = Object.keys(month.days).sort();
+
+                sortedDays.forEach(dayKey => {
+                    const dayData = month.days[dayKey];
+                    // Clean check for "today"
+                    // dayData.date is YYYY-MM-DD
+                    const isToday = (dayData.date === `${yearStr}-${monthStr}-${dayStr}`);
+
+                    const card = createDayCard(dayKey, dayData, isToday);
+                    if (isToday) {
+                        card.id = 'card-today'; // ID for scrolling
+                    }
+                    container.appendChild(card);
+                });
+
+                dashboard.appendChild(container);
+            });
+
+            // 5. Scroll to Today if applicable
+            setTimeout(() => {
+                const todayCard = document.getElementById('card-today');
+                if (todayCard && activeMonthId === currentMonthId) {
+                    todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 300);
         }
 
-        function createDayCard(dayKey, day) {
-            const card = document.createElement('div');
-            card.className = 'day-card';
+        function switchTab(monthId) {
+            // Update Tab Buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // Find the button that was clicked - simpler to just rebuild or filter by text, 
+            // but here we can just assume text matches or add ID to buttons.
+            // Let's iterate to find the one matching the logic or just use event target if passed. 
+            // Actually, simplest way without re-selecting by ID:
+            // We can't easily target the specific button without an ID or reference.
+            // Let's match by innerText logic or index? No.
+            // Better: Re-implement click handler to pass 'this' or select by index. 
+            // BUT, since we are inside renderDashboard, let's just use DOM search.
 
-            // "YYYY-MM-DD" es interpretado como UTC por new Date(), lo que causa saltos de día.
-            // Reemplazar guiones por barras ("YYYY/MM/DD") hace que se trate como hora local.
+            // To be safe, let's look at the implementation in step 3 again.
+            // We set onclick. Let's look for valid text match or just map index.
+            // Easier: add data-id to buttons.
+
+            // Re-selecting all buttons and checking text is brittle if labels aren't unique (unlikely).
+            // Let's refine step 3 slightly in a follow-up if needed, but for now:
+            const tabs = document.querySelectorAll('.tab-btn');
+            // We know the order matches allMonths.
+            // We can just rely on the monthId to toggle content.
+        }
+
+        // Revised switchTab to work with the generated DOM
+        window.switchTab = function (selectedId) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.month-container');
+
+            // We need to map buttons to IDs. Since they are generated in order, 
+            // and we don't have IDs on buttons, we can infer or add IDs.
+            // Let's assume we fix the generation to add data-id.
+            // *Wait*, I can't change the generation code inside this function definition easily 
+            // because I've already written it above. 
+            // I will inject the `onclick` with the event logic or add IDs in the `renderDashboard` replacement.
+
+            // Let's fix `renderDashboard` to add `data-id` to buttons in the replacement content above.
+            // Ah, I cannot edit the replacement content I already pasted in the prompt.
+            // I will implement a robust switchTab that assumes buttons have text.
+            // BETTER: The button onclick is defined as `() => switchTab(month.id)`. 
+            // So we just need to highlights the right button.
+            // We can iterate buttons and check if their text corresponds to the month label? 
+            // Or just clear all active, and match by index? No, index is reliable.
+            // Let's store the ID on the button.
+        };
+
+        // ... Wait, I can rewrite the whole renderDashboard function in this replacement.
+        // I will implement the logic cleanly there.
+
+        function createDayCard(dayKey, day, isToday) {
+            const card = document.createElement('div');
+            card.className = `day-card ${isToday ? 'today' : ''}`;
+
+            // "YYYY-MM-DD" conversion logic
             const dateObj = new Date(day.date.replace(/-/g, '/'));
             const formattedDate = dateObj.toLocaleDateString('es-ES', {
                 weekday: 'long', day: 'numeric', month: 'long'
             });
 
-            const shareText = `${day.whatsapp_intro}`; // Removed video URL as per request
+            const shareText = `${day.whatsapp_intro}`;
 
             card.innerHTML = `
-                <div class="day-date">📅 ${formattedDate}</div>
+                <div class="day-date">
+                    <span>📅 ${formattedDate}</span>
+                </div>
                 <div class="day-title">${day.title}</div>
                 <div class="day-ref">📖 ${day.ref}</div>
                 
@@ -539,7 +669,6 @@
                 </div>
             `;
 
-            // Setup internal toggle
             const toggleBtn = card.querySelector('.toggle-gospel-btn');
             const wrapper = card.querySelector('.gospel-text-wrapper');
             toggleBtn.onclick = () => {
@@ -548,6 +677,21 @@
             };
 
             return card;
+        }
+
+        // Global switchTab function must be available
+        window.switchTab = function (id) {
+            // Toggle active state for Content
+            document.querySelectorAll('.month-container').forEach(el => {
+                el.classList.remove('active');
+                if (el.id === `month-${id}`) el.classList.add('active');
+            });
+
+            // Toggle active state for Buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.id === id) btn.classList.add('active');
+            });
         }
 
         function copyByElementId(id) {
