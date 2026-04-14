@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letanías x Una Misión de Amor | Rosario Concierto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #10252c;
+      --ink-soft: #1d3b43;
+      --night: #102029;
+      --teal: #1fa6ad;
+      --teal-deep: #15737a;
+      --gold: #d8a649;
+      --gold-soft: #efcf8d;
+      --ivory: #f7f0e4;
+      --sand: #e7ddcc;
+      --mist: #edf6f5;
+      --white: #ffffff;
+      --shadow: 0 24px 56px rgba(10, 24, 31, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(31, 166, 173, 0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(216, 166, 73, 0.16), transparent 25%),
+        #081318;
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .deck {
+      height: 100vh;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .deck::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .slide {
+      height: 100vh;
+      width: 100vw;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .canvas {
+      position: relative;
+      width: 100%;
+      max-width: 1460px;
+      max-height: 94vh;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 37, 44, 0.12);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.25;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .canvas > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-shell {
+      height: 100%;
+      padding: 38px 54px 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 16px;
+    }
+
+    .chrome {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand-chip,
+    .slide-chip,
+    .micro-chip,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-family: "Bebas Neue", sans-serif;
+      line-height: 1;
+      border: 1px solid currentColor;
+    }
+
+    .brand-chip,
+    .slide-chip {
+      padding: 10px 14px 8px;
+      font-size: 1.08rem;
+    }
+
+    .micro-chip {
+      padding: 7px 10px 5px;
+      font-size: 0.92rem;
+    }
+
+    .tag {
+      padding: 10px 14px 8px;
+      font-size: 1rem;
+    }
+
+    .brand-chip img {
+      width: auto;
+      height: 18px;
+      max-width: 104px;
+      object-fit: contain;
+      flex: none;
+    }
+
+    .headline,
+    .section-title,
+    .stat-line {
+      font-family: "Cormorant Garamond", serif;
+      margin: 0;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+    }
+
+    .headline {
+      font-size: clamp(3.7rem, 6.2vw, 6.7rem);
+      font-weight: 700;
+    }
+
+    .section-title {
+      font-size: clamp(2.7rem, 4.5vw, 4.9rem);
+      font-weight: 700;
+    }
+
+    .stat-line {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 700;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .lede,
+    .body-copy,
+    .small-copy {
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .lede {
+      font-size: 1.14rem;
+      max-width: 58ch;
+      font-weight: 500;
+    }
+
+    .body-copy {
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .small-copy {
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .hero-grid,
+    .two-col,
+    .three-col,
+    .before-after,
+    .profile-grid,
+    .impact-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1.08fr 0.92fr;
+      align-items: stretch;
+      flex: 1;
+    }
+
+    .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .three-col {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .before-after {
+      grid-template-columns: 0.92fr 1.08fr;
+      align-items: stretch;
+    }
+
+    .profile-grid {
+      grid-template-columns: 0.95fr 1.05fr;
+      align-items: stretch;
+    }
+
+    .impact-grid {
+      grid-template-columns: 0.95fr 1.05fr;
+      align-items: stretch;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .spread {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .card,
+    .panel,
+    .quote-box,
+    .pillars-card,
+    .flow-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(16, 37, 44, 0.12);
+      box-shadow: 0 12px 28px rgba(16, 37, 44, 0.06);
+    }
+
+    .card,
+    .panel,
+    .quote-box,
+    .pillars-card {
+      border-radius: 3px;
+    }
+
+    .flow-card {
+      border-radius: 3px;
+    }
+
+    .card {
+      padding: 18px 18px 16px;
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .panel {
+      padding: 20px 20px 18px;
+    }
+
+    .quote-box {
+      padding: 22px 22px 18px;
+    }
+
+    .pillars-card {
+      padding: 18px 18px 16px;
+      min-height: 154px;
+    }
+
+    .flow-card {
+      padding: 18px 18px 16px;
+      min-height: 168px;
+    }
+
+    .pillars-card h3,
+    .flow-card h3,
+    .card h3,
+    .panel h3 {
+      margin: 6px 0 12px;
+      font-size: 1.32rem;
+      font-family: "Cormorant Garamond", serif;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .pillars-card p,
+    .flow-card p,
+    .card p,
+    .panel p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.38;
+      font-weight: 500;
+    }
+
+    .image-card,
+    .portrait,
+    .wide-image {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      min-height: 100%;
+      border: 1px solid rgba(16, 37, 44, 0.12);
+      box-shadow: 0 14px 32px rgba(6, 18, 23, 0.08);
+      background: #d0d0d0;
+    }
+
+    .image-card img,
+    .portrait img,
+    .wide-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-card::after,
+    .wide-image::after,
+    .portrait::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 32%, rgba(8, 18, 24, 0.6));
+      pointer-events: none;
+    }
+
+    .screenshot-frame {
+      box-shadow: none;
+      background: #fff;
+    }
+
+    .screenshot-frame::after {
+      display: none;
+    }
+
+    .screenshot-frame img {
+      object-fit: contain;
+      object-position: top center;
+      background: #fff;
+    }
+
+    .plain-media {
+      box-shadow: none;
+      background: transparent;
+      border-color: rgba(16, 37, 44, 0.1);
+      min-height: 0;
+      align-self: start;
+    }
+
+    .plain-media::after {
+      display: none;
+    }
+
+    .plain-media img {
+      height: auto;
+      object-fit: initial;
+      object-position: center center;
+    }
+
+    .content-pair-grid {
+      display: grid;
+      grid-template-columns: 0.98fr 1.02fr;
+      grid-template-rows: auto auto;
+      gap: 22px 28px;
+      flex: 1;
+      align-items: start;
+    }
+
+    .image-caption {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 18px;
+      z-index: 2;
+      color: var(--white);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .image-caption strong {
+      display: block;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.82rem;
+    }
+
+    .hero-collage {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-rows: 1fr 0.62fr;
+      gap: 14px;
+      height: 100%;
+    }
+
+    .hero-main {
+      grid-row: 1 / span 2;
+    }
+
+    .logo-strip {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 18px;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .logo-strip img {
+      width: 220px;
+      height: auto;
+      display: block;
+    }
+
+    .logo-strip p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.94rem;
+      line-height: 1.35;
+      max-width: 26ch;
+    }
+
+    .list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .list li {
+      position: relative;
+      padding-left: 16px;
+      font-size: 0.96rem;
+      line-height: 1.38;
+      font-weight: 600;
+    }
+
+    .list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.58em;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px 0 10px;
+      border-top: 1px solid rgba(16, 37, 44, 0.14);
+      border-bottom: 1px solid rgba(16, 37, 44, 0.08);
+    }
+
+    .metric {
+      padding: 6px 16px 4px 0;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      border-right: 1px solid rgba(16, 37, 44, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 0;
+      font-size: 2.1rem;
+      font-family: "Manrope", sans-serif;
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+      font-variant-numeric: tabular-nums;
+      color: var(--teal-deep);
+    }
+
+    .metric span {
+      display: block;
+      font-size: 0.84rem;
+      text-transform: none;
+      letter-spacing: -0.01em;
+      line-height: 1.16;
+      font-weight: 700;
+      max-width: 11ch;
+      color: var(--ink-soft);
+    }
+
+    .metric:last-child {
+      border-right: 0;
+      padding-right: 0;
+    }
+
+    .stage {
+      background:
+        radial-gradient(circle at top right, rgba(31, 166, 173, 0.24), transparent 28%),
+        linear-gradient(135deg, #0d2027 0%, #16323c 48%, #0f1f28 100%);
+      color: var(--white);
+    }
+
+    .ivory {
+      background:
+        radial-gradient(circle at top left, rgba(216, 166, 73, 0.13), transparent 30%),
+        linear-gradient(180deg, #fdf9f2 0%, #f7f1e5 100%);
+    }
+
+    .teal-surface {
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), transparent 24%),
+        linear-gradient(135deg, #1f8c92 0%, #14636a 100%);
+      color: var(--white);
+    }
+
+    .night-surface {
+      background:
+        radial-gradient(circle at top left, rgba(216, 166, 73, 0.18), transparent 20%),
+        radial-gradient(circle at bottom right, rgba(31, 166, 173, 0.2), transparent 26%),
+        linear-gradient(135deg, #0d1f28 0%, #18323d 100%);
+      color: var(--white);
+    }
+
+    .gold-surface {
+      background:
+        linear-gradient(135deg, rgba(216, 166, 73, 0.32), rgba(255, 255, 255, 0.68)),
+        #f9f2e5;
+    }
+
+    .hero-orbit,
+    .arc-mark,
+    .glow {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 999px;
+      opacity: 0.65;
+      z-index: 0;
+    }
+
+    .hero-orbit {
+      width: 720px;
+      height: 720px;
+      right: -240px;
+      top: -260px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: inset 0 0 0 70px rgba(255, 255, 255, 0.02);
+    }
+
+    .arc-mark {
+      width: 520px;
+      height: 520px;
+      left: -200px;
+      bottom: -220px;
+      border: 1px solid rgba(16, 37, 44, 0.08);
+      box-shadow: inset 0 0 0 60px rgba(216, 166, 73, 0.07);
+    }
+
+    .glow {
+      width: 340px;
+      height: 340px;
+      right: -70px;
+      bottom: -120px;
+      background: radial-gradient(circle, rgba(31, 166, 173, 0.28), transparent 68%);
+      filter: blur(12px);
+    }
+
+    .footer-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      padding-top: 12px;
+      margin-top: auto;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+    }
+
+    .footer-line.dark {
+      border-top-color: rgba(16, 37, 44, 0.12);
+    }
+
+    .footer-line span {
+      opacity: 0.8;
+    }
+
+    .note-band {
+      padding: 14px 16px 12px;
+      border-radius: 3px;
+      background: rgba(216, 166, 73, 0.14);
+      border: 1px solid rgba(216, 166, 73, 0.18);
+      font-size: 0.92rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .shape-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.8;
+    }
+
+    .shape-divider::before,
+    .shape-divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: currentColor;
+      opacity: 0.25;
+    }
+
+    .animated {
+      animation: rise 0.9s ease both;
+    }
+
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .slide {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .canvas {
+        aspect-ratio: auto;
+        min-height: 92vh;
+      }
+
+      .hero-grid,
+      .two-col,
+      .three-col,
+      .before-after,
+      .profile-grid,
+      .impact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-collage {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+
+      .hero-main {
+        grid-row: auto;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        overflow: visible;
+        background: #ffffff;
+      }
+
+      .deck {
+        height: auto;
+        overflow: visible;
+      }
+
+      .slide {
+        height: auto;
+        page-break-after: always;
+        padding: 0;
+      }
+
+      .canvas {
+        border-radius: 0;
+        box-shadow: none;
+        max-height: none;
+        width: 100vw;
+        min-height: 100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide">
+      <div class="canvas stage">
+        <div class="hero-orbit"></div>
+        <div class="glow"></div>
+        <div class="slide-shell" style="padding: 32px 54px 28px;">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(255,255,255,0.1); color: #fff;">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Letanías x Una Misión de Amor
+            </div>
+            <div class="slide-chip" style="background: rgba(216,166,73,0.14); color: #efcf8d;">
+              Presentación // 01
+            </div>
+          </div>
+
+          <div class="hero-grid">
+            <div class="stack" style="justify-content: center;">
+              <div class="animated">
+                <p class="eyebrow" style="color: rgba(255,255,255,0.68);">Rosario concierto</p>
+                <h1 class="headline">Sanación interior a través de música, rosario y oración viva.</h1>
+              </div>
+              <p class="lede animated delay-1" style="color: rgba(255,255,255,0.88); max-width: 34ch;">
+                Música, rosario y oración para abrir un espacio de encuentro, sanación interior y restauración familiar.
+              </p>
+              <div class="tags animated delay-2">
+                <span class="tag" style="background: rgba(255,255,255,0.12); color: #fff;">Música católica</span>
+                <span class="tag" style="background: rgba(216,166,73,0.18); color: #efcf8d;">Rosario meditado</span>
+                <span class="tag" style="background: rgba(31,166,173,0.18); color: #bdf3f1;">Guiomar + Letanías</span>
+                <span class="tag" style="background: rgba(255,255,255,0.12); color: #fff;">Sanación y liberación familiar</span>
+              </div>
+              <div class="logo-strip animated delay-3">
+                <img src="assets/logo-letanias.png" alt="Marca Letanías">
+                <p>
+                  Testimonios de consuelo, paz y reconciliación.
+                </p>
+              </div>
+            </div>
+
+            <div class="hero-collage animated delay-2">
+              <div class="image-card hero-main">
+                <img src="assets/jhonathan-stage-title.jpeg" alt="Rosario concierto Una Misión de Amor">
+                <div class="image-caption">
+                  <strong>Una misión de amor</strong>
+                  Formato misionero y musical con capacidad de convocar, conmover y conducir la oración.
+                </div>
+              </div>
+              <div class="image-card">
+                <img src="assets/guiomar.webp" alt="Guiomar con rosario">
+                <div class="image-caption">
+                  <strong>Guiomar / Letanías</strong>
+                  Intervención cercana, acompañamiento y aterrizaje espiritual de la experiencia.
+                </div>
+              </div>
+              <div class="image-card">
+                <img src="assets/rosario-grande.jpeg" alt="Rosario Letanías">
+                <div class="image-caption">
+                  <strong>Letanías</strong>
+                  Belleza y signos devocionales que acompañan la experiencia.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-line">
+            <span>Letanías • belleza, oración y arte</span>
+            <span>Rosario concierto • sanación interior • colaboración 2026</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="arc-mark"></div>
+        <div class="slide-shell" style="padding: 32px 54px 28px;">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Ecosistema Letanías
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
+              Letanías // 02
+            </div>
+          </div>
+
+          <div class="content-pair-grid">
+            <div class="stack" style="justify-content: start; gap: 16px;">
+              <div>
+                <p class="eyebrow" style="color: var(--teal-deep);">Qué es Letanías</p>
+                <h2 class="section-title" style="font-size: clamp(2.35rem, 3.4vw, 3.7rem); max-width: 12.5ch;">Letanías acompaña la fe con belleza y vida diaria.</h2>
+              </div>
+              <p class="lede" style="max-width: 38ch;">
+                Un proyecto católico que acompaña con <strong>contenido, comunidad, oración y signos devocionales</strong>.
+              </p>
+            </div>
+
+            <div class="wide-image screenshot-frame" style="height: 260px;">
+                <img src="assets/post.png" alt="Letanías Post">
+            </div>
+
+            <div class="panel" style="background: rgba(255,255,255,0.84); padding: 18px 20px; align-self: start;">
+              <h3 style="margin-bottom: 10px;">Hoy se expresa en</h3>
+              <p>newsletter, evangelio diario, comunidad activa, talleres, consagraciones y rosarios vividos en los tiempos fuertes del año.</p>
+            </div>
+
+            <div class="wide-image screenshot-frame" style="height: 212px;">
+              <img src="assets/skool.png" alt="Comunidad Letanías en Skool">
+            </div>
+          </div>
+
+          <div class="footer-line dark">
+            <span>letanías</span>
+            <span>oración • contenido • comunidad</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(216,166,73,0.16); color: #946a19;">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Líneas de trabajo
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
+              Comunidad activa // 03
+            </div>
+          </div>
+
+          <div class="stack" style="gap: 10px;">
+            <div style="max-width: 1040px;">
+              <p class="eyebrow" style="color: #946a19;">Qué se ve hoy en Letanías</p>
+              <h2 class="section-title" style="font-size: clamp(2.9rem, 4.7vw, 4.55rem);">Música, newsletter, evangelio diario y una comunidad que activa la fe durante todo el año.</h2>
+            </div>
+            <div class="metrics" style="grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; padding: 8px 0 6px;">
+              <div class="metric" style="padding-bottom: 2px;">
+                <strong>20+</strong>
+                <span>Ediciones de newsletter</span>
+              </div>
+              <div class="metric" style="padding-bottom: 2px;">
+                <strong>120+</strong>
+                <span>Evangelios en 2026</span>
+              </div>
+              <div class="metric" style="padding-bottom: 2px;">
+                <strong>75</strong>
+                <span>Recursos de comunidad y talleres</span>
+              </div>
+              <div class="metric" style="padding-bottom: 2px;">
+                <strong>300+</strong>
+                <span>Usuarios en Skool</span>
+              </div>
+              <div class="metric" style="padding-bottom: 2px;">
+                <strong>100k+</strong>
+                <span>Seguidores en redes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="three-col" style="flex: 1; gap: 12px;">
+            <div class="pillars-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Música</span>
+              <h3>Letanías Music</h3>
+              <p>
+                Canciones, álbumes y piezas pensadas para oración, calendario litúrgico, retiros y acompañamiento espiritual.
+              </p>
+            </div>
+            <div class="pillars-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Editorial</span>
+              <h3>Newsletter</h3>
+              <p>
+                Contenido editorial que acompaña, explica y profundiza los tiempos litúrgicos y la vida espiritual.
+              </p>
+            </div>
+            <div class="pillars-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Diario</span>
+              <h3>Evangelio diario</h3>
+              <p>
+                Producción sostenida de videos y piezas de evangelio para acompañar a la comunidad día tras día.
+              </p>
+            </div>
+            <div class="pillars-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">Comunidad</span>
+              <h3>Comunidad Letanías Club</h3>
+              <p>
+                Hoy la comunidad sostiene club de lectura, rosarios y espacios de seguimiento para quienes quieren caminar más de cerca.
+              </p>
+            </div>
+            <div class="pillars-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">Formación</span>
+              <h3>Talleres y consagraciones</h3>
+              <p>
+                Experiencias guiadas que incluyen talleres y consagraciones, especialmente de San José, para aterrizar la oración en procesos concretos.
+              </p>
+            </div>
+            <div class="pillars-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">Calendario</span>
+              <h3>Tiempos fuertes y rosarios</h3>
+              <p>
+                Semana Santa, rosarios comunitarios y otras actividades fuertes se articulan con recursos devocionales y signos concretos de Letanías.
+              </p>
+            </div>
+          </div>
+
+          <div class="footer-line dark" style="padding-top: 6px;">
+            <span>música • newsletter • evangelio • comunidad • club de lectura • consagraciones • rosarios • semana santa</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell" style="padding: 32px 54px 28px;">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Letanías + Una Misión de Amor
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
+              Colaboración // 04
+            </div>
+          </div>
+
+          <div class="before-after" style="flex: 1; grid-template-columns: 0.88fr 1.12fr; gap: 16px;">
+            <div class="image-card" style="height: 560px;">
+              <img src="assets/jhonathan-duo.jpeg" alt="Jonathan Loaiza y acompañante en escenario">
+            </div>
+
+            <div class="stack" style="justify-content: center; gap: 14px;">
+              <div>
+                <p class="eyebrow" style="color: var(--teal-deep);">Una colaboración completa</p>
+                <h2 class="section-title" style="font-size: clamp(2.9rem, 4.4vw, 4.5rem);">Música, rosario, acompañamiento y continuidad en comunidad.</h2>
+              </div>
+              <p class="lede" style="color: var(--ink-soft); max-width: 42ch;">
+                Se integran <strong>Rosario Concierto</strong>, intervención de <strong>Guiomar</strong>, oración compartida y continuidad posterior.
+              </p>
+              <div class="card" style="background: rgba(255,255,255,0.9); color: var(--ink); padding: 14px 16px 12px;">
+                <ul class="list" style="color: var(--ink-soft);">
+                  <li>Rosario meditado con música en vivo y oración guiada.</li>
+                  <li>Intervención cercana de Guiomar dentro de la experiencia.</li>
+                  <li>Continuidad posterior en comunidad, contenido y acompañamiento.</li>
+                </ul>
+              </div>
+              <div class="note-band" style="padding: 12px 14px 10px;">
+                No es un momento aislado: es una experiencia espiritual que puede seguir dando fruto después del encuentro.
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-line dark">
+            <span>rosario concierto</span>
+            <span>acompañamiento</span>
+            <span>comunidad</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell" style="padding: 32px 54px 28px;">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Letanías + Una Misión de Amor
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
+              Retiros // 05
+            </div>
+          </div>
+
+          <div class="stack" style="flex: 1; gap: 16px;">
+            <div class="before-after" style="grid-template-columns: 0.92fr 1.08fr; gap: 20px; align-items: start;">
+              <div class="stack" style="justify-content: start; gap: 12px;">
+                <div>
+                  <p class="eyebrow" style="color: var(--teal-deep);">Otro formato conjunto</p>
+                  <h2 class="section-title" style="font-size: clamp(2rem, 2.85vw, 2.75rem); max-width: 12ch;">Retiros periódicos de Letanías y Una Misión de Amor.</h2>
+                </div>
+                <p class="lede" style="color: var(--ink-soft); max-width: 38ch;">
+                  Un formato distinto al <strong>Rosario Concierto</strong>: más pausado, con mayor profundidad espiritual y tiempos extendidos de oración, enseñanza y acompañamiento.
+                </p>
+                <div class="note-band" style="padding: 10px 12px 8px;">
+                  Aquí el énfasis no es el formato concierto, sino el camino de retiro, escucha, oración y acompañamiento.
+                </div>
+              </div>
+
+              <div class="image-card plain-media">
+                <img src="assets/retiros-cover.png" alt="Retiros periódicos Letanías y Una Misión de Amor">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+              <div class="card" style="background: rgba(255,255,255,0.92); padding: 12px 12px 10px;">
+                <h3>Jornada de retiro</h3>
+                <p>Puede vivirse como media jornada, día completo o retiro de fin de semana, según el contexto.</p>
+              </div>
+              <div class="card" style="background: rgba(255,255,255,0.92); padding: 12px 12px 10px;">
+                <h3>Oración y enseñanza</h3>
+                <p>Meditaciones, música, momentos de silencio, espacios de escucha y acompañamiento espiritual.</p>
+              </div>
+              <div class="card" style="background: rgba(255,255,255,0.92); padding: 12px 12px 10px;">
+                <h3>Proceso más amplio</h3>
+                <p>Permite trabajar temas de sanación interior, reconciliación y vida espiritual con más tiempo.</p>
+              </div>
+              <div class="card" style="background: rgba(255,255,255,0.92); padding: 12px 12px 10px;">
+                <h3>Continuidad posterior</h3>
+                <p>Puede enlazarse con comunidad, recursos y seguimiento para sostener el fruto del retiro.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              El formato
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
+              Rosario concierto // 06
+            </div>
+          </div>
+
+          <div class="spread" style="align-items: end; gap: 12px;">
+            <div>
+              <p class="eyebrow" style="color: var(--teal-deep);">De qué va el evento</p>
+              <h2 class="section-title" style="font-size: clamp(2.4rem, 3.7vw, 3.55rem); max-width: 13ch;">No es un recital ni una charla suelta. Es una experiencia de encuentro con Dios.</h2>
+            </div>
+            <div class="wide-image" style="width: 320px; height: 170px;">
+                <img src="assets/jhonathan-stage-1.jpeg" alt="Jonathan Loaiza en concierto">
+              </div>
+            </div>
+
+          <div class="three-col" style="flex: 1; gap: 12px;">
+            <div class="flow-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">01</span>
+              <h3>Alabanza y música católica</h3>
+              <p>
+                Canciones en vivo para disponer el corazón y entrar en clima de oración.
+              </p>
+            </div>
+            <div class="flow-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">02</span>
+              <h3>Rosario meditado y comunitario</h3>
+              <p>
+                El rosario se vive como experiencia espiritual, con peticiones y participación de familias.
+              </p>
+            </div>
+            <div class="flow-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">03</span>
+              <h3>Intervención de Guiomar</h3>
+              <p>
+                Guiomar acompaña con peticiones, cercanía y pequeñas meditaciones.
+              </p>
+            </div>
+            <div class="flow-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">04</span>
+              <h3>Sanación interior</h3>
+              <p>
+                La oración puede enfocarse en sanación interior, reconciliación o sanación de recuerdos.
+              </p>
+            </div>
+            <div class="flow-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">05</span>
+              <h3>Sanación y liberación familiar</h3>
+              <p>
+                También se ora por vínculos, memorias, reconciliación y restauración familiar.
+              </p>
+            </div>
+            <div class="flow-card" style="background: rgba(255,255,255,0.9); padding: 12px 12px 10px; min-height: 122px;">
+              <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">06</span>
+              <h3>Adoración y cierre según el contexto</h3>
+              <p>
+                Si el contexto lo permite, puede integrarse adoración al Santísimo.
+              </p>
+            </div>
+          </div>
+
+          <div class="footer-line dark" style="padding-top: 6px;">
+            <span>oración guiada • música • rosario • sanación</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(216,166,73,0.12); color: #946a19;">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Impacto espiritual
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
+              Corazón del encuentro // 07
+            </div>
+          </div>
+
+          <div class="two-col" style="flex: 1; align-items: stretch;">
+            <div class="stack" style="justify-content: center;">
+              <div>
+                <p class="eyebrow" style="color: #946a19;">Sanación interior</p>
+                <h2 class="section-title">Un espacio para tocar heridas, recuerdos, vínculos y esperanza.</h2>
+              </div>
+              <div class="quote-box gold-surface">
+                <p class="stat-line">Consuelo, paz, reconciliación y libertad interior.</p>
+              </div>
+              <p class="lede" style="color: var(--ink-soft);">
+                Quienes han participado en este tipo de encuentros han compartido <strong>testimonios de consuelo, paz, reconciliación
+                y libertad interior</strong>.
+              </p>
+              <div class="two-col">
+                <div class="card" style="background: rgba(255,255,255,0.92); color: var(--ink);">
+                  <h3>Sanación interior</h3>
+                  <p>Heridas afectivas, recuerdos, cansancio espiritual y búsquedas profundas.</p>
+                </div>
+                <div class="card" style="background: rgba(255,255,255,0.92); color: var(--ink);">
+                  <h3>Liberación familiar</h3>
+                  <p>Oración por la historia familiar, la reconciliación y la restauración de vínculos.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack" style="justify-content: center;">
+              <div class="image-card" style="height: 520px;">
+                <img src="assets/jhonathan-church.jpeg" alt="Jonathan Loaiza cantando en iglesia">
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-line dark">
+            <span>sanación interior</span>
+            <span>sanación y liberación familiar</span>
+            <span>oración viva</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Destinatarios
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
+              Dónde puede suceder // 08
+            </div>
+          </div>
+
+          <div class="before-after" style="flex: 1; grid-template-columns: 0.9fr 1.1fr; gap: 16px;">
+            <div class="stack" style="justify-content: center; gap: 10px;">
+              <div>
+                <p class="eyebrow" style="color: var(--teal-deep);">Contextos donde puede vivirse</p>
+              <h2 class="section-title" style="font-size: clamp(2.35rem, 3.45vw, 3.35rem); max-width: 11ch;">Un formato adaptable a contextos pastorales, educativos y comunitarios.</h2>
+              </div>
+              <div class="card" style="background: rgba(255,255,255,0.92); padding: 14px 14px 12px;">
+                <h3>Espacios posibles</h3>
+                <div class="tags" style="margin-top: 10px; gap: 8px;">
+                  <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Parroquias</span>
+                  <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Colegios</span>
+                  <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Universidades</span>
+                  <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Movimientos</span>
+                  <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Retiros</span>
+                  <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Diócesis</span>
+                </div>
+              </div>
+              <div class="panel" style="background: rgba(255,255,255,0.88); padding: 14px 14px 12px;">
+                <h3>Flexible en forma, claro en intención</h3>
+                <p>
+                  Puede realizarse en iglesia, auditorio, teatro o salón parroquial sin perder el foco espiritual. Funciona especialmente bien donde una comunidad necesita
+                  <strong>renovar la vida de oración</strong>, reunir familias o abrir un espacio de sanación.
+                </p>
+              </div>
+            </div>
+
+            <div class="image-card" style="height: 520px;">
+              <img src="assets/jhonathan-stage-2.jpeg" alt="Jonathan Loaiza en escenario con guitarra">
+            </div>
+          </div>
+
+          <div class="footer-line dark" style="padding-top: 6px;">
+            <span>contexto flexible • encuentro • oración • sanación</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Continuidad
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
+              Antes y después // 09
+            </div>
+          </div>
+
+          <div class="stack" style="flex: 1; justify-content: center;">
+            <div>
+              <p class="eyebrow" style="color: var(--teal-deep);">Una colaboración completa</p>
+              <h2 class="section-title">El encuentro no termina cuando baja la música.</h2>
+            </div>
+            <p class="lede" style="color: var(--ink-soft); max-width: 64ch;">
+              Letanías permite que la experiencia presencial tenga continuidad a través de comunidad, contenido y acompañamiento.
+            </p>
+            <div class="three-col">
+              <div class="flow-card" style="background: rgba(255,255,255,0.9); color: var(--ink);">
+                <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Antes</span>
+                <h3>Convocatoria y preparación</h3>
+                <p>
+                  Comunicación clara de lo que se va a vivir, con videos, flyer, redes y preparación pastoral.
+                </p>
+              </div>
+              <div class="flow-card" style="background: rgba(255,255,255,0.9); color: var(--ink);">
+                <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">Durante</span>
+                <h3>Experiencia artística y espiritual</h3>
+                <p>
+                  Jonathan guía musicalmente el Rosario Concierto y Guiomar interviene dentro de la sesión; se integran peticiones y participación de familias.
+                </p>
+              </div>
+              <div class="flow-card" style="background: rgba(255,255,255,0.9); color: var(--ink);">
+                <span class="micro-chip" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Después</span>
+                <h3>Seguimiento y comunidad</h3>
+                <p>
+                  Newsletter, evangelio diario, club de lectura, consagraciones de San José, rosarios comunitarios y tiempos fuertes como Semana Santa ayudan a sostener el fruto.
+                </p>
+              </div>
+            </div>
+            <div class="panel" style="background: rgba(255,255,255,0.92); color: var(--ink);">
+              <h3 style="margin-bottom: 10px;">Una experiencia que permanece</h3>
+              <p>
+                Evangelización, experiencia mariana, acompañamiento y continuidad pastoral en un mismo camino.
+              </p>
+            </div>
+          </div>
+
+          <div class="footer-line dark">
+            <span>antes</span>
+            <span>durante</span>
+            <span>después</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(216,166,73,0.16); color: #946a19;">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Quiénes lo hacen
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
+              Colaboradores // 10
+            </div>
+          </div>
+
+          <div class="stack" style="flex: 1; justify-content: center; gap: 18px;">
+            <div class="spread" style="align-items: end; gap: 28px;">
+              <div style="max-width: 22ch;">
+                <p class="eyebrow" style="color: #946a19;">Letanías y Una Misión de Amor</p>
+                <h2 class="section-title" style="font-size: clamp(1.7rem, 2.35vw, 2.35rem);">Dos presencias al servicio de un mismo camino de oración.</h2>
+              </div>
+              <p class="lede" style="max-width: 34ch; margin: 0 0 8px 0;">
+                Guiomar acompaña con cercanía y guía espiritual. Jonathan Loaiza sirve desde la música y el formato misionero de
+                <strong>Una Misión de Amor</strong>.
+              </p>
+            </div>
+
+	            <div class="two-col" style="grid-template-columns: 0.96fr 1.04fr; align-items: stretch;">
+	              <div class="stack" style="gap: 12px;">
+	                <div class="portrait" style="height: 255px;">
+	                  <img src="assets/guiomar.webp" alt="Guiomar con rosario" style="object-position: center 24%;">
+	                </div>
+	              </div>
+
+              <div class="stack" style="gap: 12px;">
+                <div class="wide-image" style="height: 255px;">
+                  <img src="assets/jhonathan-church.jpeg" alt="Jonathan Loaiza cantando en templo">
+                </div>
+              </div>
+            </div>
+          </div>
+
+	          <div class="footer-line dark">
+	            <span>guiomar cormane</span>
+	            <span>jonathan loaiza</span>
+	          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas stage">
+        <div class="hero-orbit" style="right: auto; left: -260px; top: -220px;"></div>
+        <div class="glow" style="left: auto; right: -110px; top: auto; bottom: -90px;"></div>
+        <div class="slide-shell">
+          <div class="chrome">
+            <div class="brand-chip" style="background: rgba(255,255,255,0.1); color: #fff;">
+              <img src="assets/logo-letanias.png" alt="Logo Letanías">
+              Letanías x Una Misión de Amor
+            </div>
+            <div class="slide-chip" style="background: rgba(216,166,73,0.14); color: #efcf8d;">
+              Rosario concierto // 11
+            </div>
+          </div>
+
+          <div class="stack" style="flex: 1; justify-content: center; align-items: center; text-align: center;">
+            <div class="shape-divider" style="width: min(580px, 100%); color: rgba(255,255,255,0.7);">
+              <span>Letanías x Una Misión de Amor</span>
+            </div>
+            <h2 class="headline" style="max-width: 11ch; font-size: clamp(3.2rem, 5.4vw, 5.8rem);">Un camino de encuentro, sanación y esperanza.</h2>
+            <p class="lede" style="max-width: 48ch; color: rgba(255,255,255,0.88);">
+              Una experiencia donde la música, el rosario y la oración ayuden a que las personas vuelvan a casa con
+              <strong>más paz, más fe y más esperanza</strong>.
+            </p>
+            <div class="tags">
+              <span class="tag" style="background: rgba(255,255,255,0.1); color: #fff;">Rosario concierto</span>
+              <span class="tag" style="background: rgba(216,166,73,0.18); color: #efcf8d;">Sanación interior</span>
+              <span class="tag" style="background: rgba(31,166,173,0.18); color: #bdf3f1;">Acompañamiento Letanías</span>
+            </div>
+          </div>
+
+          <div class="footer-line">
+            <span>Letanías</span>
+            <span>Una Misión de Amor</span>
+            <span>sanación interior • liberación familiar • misión</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
