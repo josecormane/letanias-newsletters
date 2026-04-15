@@ -579,6 +579,7 @@
       background: #0f1f28;
       box-shadow: 0 14px 28px rgba(6, 18, 23, 0.08);
       scroll-snap-align: start;
+      cursor: pointer;
     }
 
     .event-card img {
@@ -594,6 +595,95 @@
       object-fit: cover;
       display: block;
       background: #0f1f28;
+    }
+
+    .event-card > img,
+    .event-card > video {
+      pointer-events: none;
+    }
+
+    .media-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: rgba(6, 18, 23, 0.84);
+      backdrop-filter: blur(10px);
+    }
+
+    .media-modal[hidden] {
+      display: none;
+    }
+
+    .media-modal-dialog {
+      width: min(1180px, 100%);
+      max-height: calc(100vh - 56px);
+      max-height: calc(100dvh - 56px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .media-modal-topbar {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .media-modal-close {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      padding: 10px 14px 8px;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .media-modal-stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(10, 24, 31, 0.86);
+      box-shadow: 0 32px 72px rgba(0, 0, 0, 0.34);
+    }
+
+    .media-modal-stage img,
+    .media-modal-stage video {
+      width: 100%;
+      height: 100%;
+      max-height: calc(100vh - 140px);
+      max-height: calc(100dvh - 140px);
+      display: block;
+      background: #09151b;
+    }
+
+    .media-modal-stage img {
+      object-fit: contain;
+    }
+
+    .media-modal-stage video {
+      object-fit: contain;
+    }
+
+    .media-modal-caption {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.92rem;
+      line-height: 1.4;
+      text-align: center;
     }
 
     .list {
@@ -1561,6 +1651,15 @@
       </div>
     </section>
   </main>
+  <div class="media-modal" id="media-modal" hidden aria-hidden="true">
+    <div class="media-modal-dialog" role="dialog" aria-modal="true" aria-label="Vista ampliada de galería">
+      <div class="media-modal-topbar">
+        <button class="media-modal-close" type="button" id="media-modal-close">Cerrar</button>
+      </div>
+      <div class="media-modal-stage" id="media-modal-stage"></div>
+      <p class="media-modal-caption" id="media-modal-caption"></p>
+    </div>
+  </div>
 <script>
   (() => {
     const DESIGN_WIDTH = 1460;
@@ -1594,6 +1693,35 @@
     });
 
     const umaGallery = [...umaVideos, ...umaImages];
+    const mediaModal = document.getElementById('media-modal');
+    const mediaModalStage = document.getElementById('media-modal-stage');
+    const mediaModalCaption = document.getElementById('media-modal-caption');
+    const mediaModalClose = document.getElementById('media-modal-close');
+
+    const closeMediaModal = () => {
+      mediaModal.hidden = true;
+      mediaModal.setAttribute('aria-hidden', 'true');
+      mediaModalStage.innerHTML = '';
+      mediaModalCaption.textContent = '';
+    };
+
+    const openMediaModal = (item) => {
+      if (item.type === 'video') {
+        mediaModalStage.innerHTML = `
+          <video controls autoplay playsinline preload="auto">
+            <source src="${item.src}" type="video/mp4">
+          </video>
+        `;
+      } else {
+        mediaModalStage.innerHTML = `
+          <img src="${item.src}" alt="${item.alt}" decoding="async">
+        `;
+      }
+
+      mediaModalCaption.textContent = item.alt;
+      mediaModal.hidden = false;
+      mediaModal.setAttribute('aria-hidden', 'false');
+    };
 
     const mountUmaGallery = () => {
       document.querySelectorAll('[data-gallery="uma-events"]').forEach((node) => {
@@ -1601,7 +1729,7 @@
         node.innerHTML = umaGallery.map((item, index) => {
           if (item.type === "video") {
             return `
-          <figure class="event-card">
+          <figure class="event-card" data-media-type="${item.type}" data-media-src="${item.src}" data-media-alt="${item.alt}">
             <video autoplay muted loop playsinline preload="${index < 2 ? "auto" : "metadata"}" aria-label="${item.alt}">
               <source src="${item.src}" type="video/mp4">
             </video>
@@ -1610,12 +1738,23 @@
           }
 
           return `
-          <figure class="event-card">
+          <figure class="event-card" data-media-type="${item.type}" data-media-src="${item.src}" data-media-alt="${item.alt}">
             <img src="${item.src}" alt="${item.alt}" loading="${index < 6 ? "eager" : "lazy"}" fetchpriority="${index < 4 ? "high" : "auto"}" decoding="async">
           </figure>
         `;
         }).join("");
         node.dataset.ready = "true";
+
+        node.addEventListener('click', (event) => {
+          const card = event.target.closest('.event-card');
+          if (!card) return;
+
+          openMediaModal({
+            type: card.dataset.mediaType,
+            src: card.dataset.mediaSrc,
+            alt: card.dataset.mediaAlt
+          });
+        });
       });
     };
 
@@ -1633,6 +1772,13 @@
 
     mountUmaGallery();
     updateDeckScale();
+    mediaModalClose.addEventListener('click', closeMediaModal);
+    mediaModal.addEventListener('click', (event) => {
+      if (event.target === mediaModal) closeMediaModal();
+    });
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !mediaModal.hidden) closeMediaModal();
+    });
     window.addEventListener('resize', updateDeckScale, { passive: true });
     window.visualViewport?.addEventListener('resize', updateDeckScale, { passive: true });
   })();
