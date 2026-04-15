@@ -168,6 +168,40 @@
       flex: none;
     }
 
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .support-chip {
+      width: 56px;
+      height: 56px;
+      padding: 6px;
+      border-radius: 3px;
+      border: 1px solid rgba(16, 37, 44, 0.12);
+      background: #050505;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      box-shadow: 0 12px 24px rgba(6, 18, 23, 0.08);
+      overflow: hidden;
+    }
+
+    .support-chip img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .support-chip.light-outline {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: none;
+    }
+
     .headline,
     .section-title,
     .stat-line {
@@ -477,6 +511,83 @@
       max-width: 26ch;
     }
 
+    .scroll-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px 6px;
+      border: 1px solid rgba(16, 37, 44, 0.12);
+      border-radius: 999px;
+      font-size: 0.84rem;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.78);
+      white-space: nowrap;
+    }
+
+    .scroll-hint strong {
+      font-size: 1rem;
+      line-height: 1;
+      color: var(--teal-deep);
+    }
+
+    .event-carousel-shell {
+      padding: 14px 14px 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(16, 37, 44, 0.12);
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: 0 12px 28px rgba(16, 37, 44, 0.06);
+    }
+
+    .event-carousel {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 2px 12px;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(16, 37, 44, 0.28) transparent;
+      overscroll-behavior-x: contain;
+      touch-action: pan-x;
+    }
+
+    .event-carousel::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .event-carousel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .event-carousel::-webkit-scrollbar-thumb {
+      background: rgba(16, 37, 44, 0.24);
+      border-radius: 999px;
+    }
+
+    .event-card {
+      flex: 0 0 214px;
+      height: 328px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      border: 1px solid rgba(16, 37, 44, 0.12);
+      background: #0f1f28;
+      box-shadow: 0 14px 28px rgba(6, 18, 23, 0.08);
+      scroll-snap-align: start;
+    }
+
+    .event-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     .list {
       margin: 0;
       padding: 0;
@@ -691,6 +802,7 @@
         transform: translateY(0);
       }
     }
+
 
     @media print {
       body {
@@ -940,9 +1052,14 @@
       <div class="canvas ivory">
         <div class="slide-shell" style="padding: 32px 54px 28px;">
           <div class="chrome">
-            <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
-              <img src="assets/logo-letanias.png" alt="Logo Letanías">
-              Letanías + Una Misión de Amor
+            <div class="brand-cluster">
+              <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
+                <img src="assets/logo-letanias.png" alt="Logo Letanías">
+                Letanías + Una Misión de Amor
+              </div>
+              <div class="support-chip">
+                <img src="assets/logo-uma.jpg" alt="Logo Una Misión de Amor">
+              </div>
             </div>
             <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
               Colaboración // 04
@@ -951,7 +1068,7 @@
 
           <div class="before-after" style="flex: 1; grid-template-columns: 0.88fr 1.12fr; gap: 16px;">
             <div class="image-card" style="height: 560px;">
-              <img src="assets/jhonathan-duo.jpeg" alt="Jonathan Loaiza y acompañante en escenario">
+              <img src="assets/jhonathan-duo.jpeg" alt="Jhonathan Loaiza y acompañante en escenario">
             </div>
 
             <div class="stack" style="justify-content: center; gap: 14px;">
@@ -988,12 +1105,70 @@
       <div class="canvas ivory">
         <div class="slide-shell" style="padding: 32px 54px 28px;">
           <div class="chrome">
-            <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
-              <img src="assets/logo-letanias.png" alt="Logo Letanías">
-              Letanías + Una Misión de Amor
+            <div class="brand-cluster">
+              <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
+                <img src="assets/logo-letanias.png" alt="Logo Letanías">
+                Archivo compartido
+              </div>
+              <div class="support-chip">
+                <img src="assets/logo-uma.jpg" alt="Logo Una Misión de Amor">
+              </div>
             </div>
             <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
-              Retiros // 05
+              Galería // 05
+            </div>
+          </div>
+
+          <div class="stack" style="flex: 1; gap: 14px;">
+            <div class="spread" style="align-items: end; gap: 20px;">
+              <div class="stack" style="gap: 12px; max-width: 34ch;">
+                <div>
+                  <p class="eyebrow" style="color: var(--teal-deep);">Galería de eventos</p>
+                  <h2 class="section-title" style="font-size: clamp(2.3rem, 3.35vw, 3.3rem); max-width: 12ch;">Así se ve Una Misión de Amor en vivo.</h2>
+                </div>
+                <p class="lede" style="color: var(--ink-soft); max-width: 36ch;">
+                  Un archivo visual de encuentros y escenarios donde la música de <strong>Jhonathan Loaiza</strong> convoca, acompaña y abre espacio para la oración.
+                </p>
+              </div>
+
+              <div class="stack" style="gap: 12px; align-items: flex-end;">
+                <div class="tags" style="justify-content: flex-end;">
+                  <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Eventos reales</span>
+                  <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Jhonathan Loaiza</span>
+                  <span class="tag" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">Una Misión de Amor</span>
+                </div>
+                <div class="scroll-hint">Desliza a la derecha para recorrer la galería <strong>→</strong></div>
+              </div>
+            </div>
+
+            <div class="event-carousel-shell">
+              <div class="event-carousel" data-gallery="uma-events"></div>
+            </div>
+          </div>
+
+          <div class="footer-line dark">
+            <span>archivo visual • escenarios • misión en vivo</span>
+            <span>jhonathan loaiza • una misión de amor</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="canvas ivory">
+        <div class="slide-shell" style="padding: 32px 54px 28px;">
+          <div class="chrome">
+            <div class="brand-cluster">
+              <div class="brand-chip" style="background: rgba(31,166,173,0.08); color: var(--teal-deep);">
+                <img src="assets/logo-letanias.png" alt="Logo Letanías">
+                Letanías + Una Misión de Amor
+              </div>
+              <div class="support-chip">
+                <img src="assets/logo-uma.jpg" alt="Logo Una Misión de Amor">
+              </div>
+            </div>
+            <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
+              Retiros // 06
             </div>
           </div>
 
@@ -1049,7 +1224,7 @@
               El formato
             </div>
             <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
-              Rosario concierto // 06
+              Rosario concierto // 07
             </div>
           </div>
 
@@ -1059,7 +1234,7 @@
               <h2 class="section-title" style="font-size: clamp(2.4rem, 3.7vw, 3.55rem); max-width: 13ch;">No es un recital ni una charla suelta. Es una experiencia de encuentro con Dios.</h2>
             </div>
             <div class="wide-image" style="width: 320px; height: 170px;">
-                <img src="assets/jhonathan-stage-1.jpeg" alt="Jonathan Loaiza en concierto">
+                <img src="assets/jhonathan-stage-1.jpeg" alt="Jhonathan Loaiza en concierto">
               </div>
             </div>
 
@@ -1124,7 +1299,7 @@
               Impacto espiritual
             </div>
             <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
-              Corazón del encuentro // 07
+              Corazón del encuentro // 08
             </div>
           </div>
 
@@ -1155,7 +1330,7 @@
 
             <div class="stack" style="justify-content: center;">
               <div class="image-card" style="height: 520px;">
-                <img src="assets/jhonathan-church.jpeg" alt="Jonathan Loaiza cantando en iglesia">
+                <img src="assets/jhonathan-church.jpeg" alt="Jhonathan Loaiza cantando en iglesia">
               </div>
             </div>
           </div>
@@ -1178,7 +1353,7 @@
               Destinatarios
             </div>
             <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
-              Dónde puede suceder // 08
+              Dónde puede suceder // 09
             </div>
           </div>
 
@@ -1209,7 +1384,7 @@
             </div>
 
             <div class="image-card" style="height: 520px;">
-              <img src="assets/jhonathan-stage-2.jpeg" alt="Jonathan Loaiza en escenario con guitarra">
+              <img src="assets/jhonathan-stage-2.jpeg" alt="Jhonathan Loaiza en escenario con guitarra">
             </div>
           </div>
 
@@ -1229,7 +1404,7 @@
               Continuidad
             </div>
             <div class="slide-chip" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">
-              Antes y después // 09
+              Antes y después // 10
             </div>
           </div>
 
@@ -1253,7 +1428,7 @@
                 <span class="micro-chip" style="background: rgba(216,166,73,0.14); color: #946a19;">Durante</span>
                 <h3>Experiencia artística y espiritual</h3>
                 <p>
-                  Jonathan guía musicalmente el Rosario Concierto y Guiomar interviene dentro de la sesión; se integran peticiones y participación de familias.
+                  Jhonathan guía musicalmente el Rosario Concierto y Guiomar interviene dentro de la sesión; se integran peticiones y participación de familias.
                 </p>
               </div>
               <div class="flow-card" style="background: rgba(255,255,255,0.9); color: var(--ink);">
@@ -1285,12 +1460,17 @@
       <div class="canvas ivory">
         <div class="slide-shell">
           <div class="chrome">
-            <div class="brand-chip" style="background: rgba(216,166,73,0.16); color: #946a19;">
-              <img src="assets/logo-letanias.png" alt="Logo Letanías">
-              Quiénes lo hacen
+            <div class="brand-cluster">
+              <div class="brand-chip" style="background: rgba(216,166,73,0.16); color: #946a19;">
+                <img src="assets/logo-letanias.png" alt="Logo Letanías">
+                Quiénes lo hacen
+              </div>
+              <div class="support-chip">
+                <img src="assets/logo-uma.jpg" alt="Logo Una Misión de Amor">
+              </div>
             </div>
             <div class="slide-chip" style="background: rgba(16,37,44,0.08); color: var(--ink-soft);">
-              Colaboradores // 10
+              Colaboradores // 11
             </div>
           </div>
 
@@ -1301,7 +1481,7 @@
                 <h2 class="section-title" style="font-size: clamp(1.7rem, 2.35vw, 2.35rem);">Dos presencias al servicio de un mismo camino de oración.</h2>
               </div>
               <p class="lede" style="max-width: 34ch; margin: 0 0 8px 0;">
-                Guiomar acompaña con cercanía y guía espiritual. Jonathan Loaiza sirve desde la música y el formato misionero de
+                Guiomar acompaña con cercanía y guía espiritual. Jhonathan Loaiza sirve desde la música y el formato misionero de
                 <strong>Una Misión de Amor</strong>.
               </p>
             </div>
@@ -1315,7 +1495,7 @@
 
               <div class="stack" style="gap: 12px;">
                 <div class="wide-image" style="height: 255px;">
-                  <img src="assets/jhonathan-church.jpeg" alt="Jonathan Loaiza cantando en templo">
+                  <img src="assets/jhonathan-church.jpeg" alt="Jhonathan Loaiza cantando en templo">
                 </div>
               </div>
             </div>
@@ -1323,7 +1503,7 @@
 
 	          <div class="footer-line dark">
 	            <span>guiomar cormane</span>
-	            <span>jonathan loaiza</span>
+	            <span>jhonathan loaiza</span>
 	          </div>
         </div>
       </div>
@@ -1340,7 +1520,7 @@
               Letanías x Una Misión de Amor
             </div>
             <div class="slide-chip" style="background: rgba(216,166,73,0.14); color: #efcf8d;">
-              Rosario concierto // 11
+              Rosario concierto // 12
             </div>
           </div>
 
@@ -1374,6 +1554,22 @@
     const DESIGN_WIDTH = 1460;
     const DESIGN_HEIGHT = 821.25;
     const FRAME_PADDING = 48;
+    const umaGallery = Array.from({ length: 32 }, (_, index) => ({
+      src: `assets/uma-gallery-${String(index + 1).padStart(2, "0")}.jpeg`,
+      alt: `Jhonathan Loaiza durante un evento de Una Misión de Amor ${index + 1}`
+    }));
+
+    const mountUmaGallery = () => {
+      document.querySelectorAll('[data-gallery="uma-events"]').forEach((node) => {
+        if (node.dataset.ready === "true") return;
+        node.innerHTML = umaGallery.map((image, index) => `
+          <figure class="event-card">
+            <img src="${image.src}" alt="${image.alt}" loading="${index < 6 ? "eager" : "lazy"}" fetchpriority="${index < 4 ? "high" : "auto"}" decoding="async">
+          </figure>
+        `).join("");
+        node.dataset.ready = "true";
+      });
+    };
 
     const updateDeckScale = () => {
       const viewport = window.visualViewport;
@@ -1384,12 +1580,13 @@
         (height - FRAME_PADDING) / DESIGN_HEIGHT
       );
 
-      document.documentElement.style.setProperty("--slide-scale", Math.max(scale, 0.1).toFixed(4));
+      document.documentElement.style.setProperty('--slide-scale', Math.max(scale, 0.1).toFixed(4));
     };
 
+    mountUmaGallery();
     updateDeckScale();
-    window.addEventListener("resize", updateDeckScale, { passive: true });
-    window.visualViewport?.addEventListener("resize", updateDeckScale, { passive: true });
+    window.addEventListener('resize', updateDeckScale, { passive: true });
+    window.visualViewport?.addEventListener('resize', updateDeckScale, { passive: true });
   })();
 </script>
 </body>
