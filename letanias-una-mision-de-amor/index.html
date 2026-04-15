@@ -21,6 +21,9 @@
       --mist: #edf6f5;
       --white: #ffffff;
       --shadow: 0 24px 56px rgba(10, 24, 31, 0.16);
+      --slide-width: 1460px;
+      --slide-height: 821.25px;
+      --slide-scale: 1;
     }
 
     * {
@@ -49,6 +52,7 @@
 
     .deck {
       height: 100vh;
+      height: 100dvh;
       overflow-y: auto;
       scroll-snap-type: y mandatory;
       scroll-behavior: smooth;
@@ -61,26 +65,33 @@
 
     .slide {
       height: 100vh;
+      height: 100dvh;
       width: 100vw;
       padding: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       scroll-snap-align: start;
       scroll-snap-stop: always;
     }
 
     .canvas {
       position: relative;
-      width: 100%;
-      max-width: 1460px;
-      max-height: 94vh;
-      aspect-ratio: 16 / 9;
+      width: var(--slide-width);
+      height: var(--slide-height);
+      max-width: none;
+      max-height: none;
+      aspect-ratio: auto;
       overflow: hidden;
       border-radius: 4px;
       border: 1px solid rgba(16, 37, 44, 0.12);
       box-shadow: var(--shadow);
       isolation: isolate;
+      flex: none;
+      transform: scale(var(--slide-scale));
+      transform-origin: center center;
+      will-change: transform;
     }
 
     .canvas::before {
@@ -681,40 +692,6 @@
       }
     }
 
-    @media (max-width: 1200px) {
-      .slide {
-        height: auto;
-        min-height: 100vh;
-      }
-
-      .canvas {
-        aspect-ratio: auto;
-        min-height: 92vh;
-      }
-
-      .hero-grid,
-      .two-col,
-      .three-col,
-      .before-after,
-      .profile-grid,
-      .impact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-collage {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-      }
-
-      .hero-main {
-        grid-row: auto;
-      }
-
-      .metrics {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media print {
       body {
         overflow: visible;
@@ -737,7 +714,10 @@
         box-shadow: none;
         max-height: none;
         width: 100vw;
+        height: auto;
+        aspect-ratio: 16 / 9;
         min-height: 100vh;
+        transform: none;
       }
     }
   </style>
@@ -1389,5 +1369,28 @@
       </div>
     </section>
   </main>
+<script>
+  (() => {
+    const DESIGN_WIDTH = 1460;
+    const DESIGN_HEIGHT = 821.25;
+    const FRAME_PADDING = 48;
+
+    const updateDeckScale = () => {
+      const viewport = window.visualViewport;
+      const width = viewport?.width ?? window.innerWidth;
+      const height = viewport?.height ?? window.innerHeight;
+      const scale = Math.min(
+        (width - FRAME_PADDING) / DESIGN_WIDTH,
+        (height - FRAME_PADDING) / DESIGN_HEIGHT
+      );
+
+      document.documentElement.style.setProperty("--slide-scale", Math.max(scale, 0.1).toFixed(4));
+    };
+
+    updateDeckScale();
+    window.addEventListener("resize", updateDeckScale, { passive: true });
+    window.visualViewport?.addEventListener("resize", updateDeckScale, { passive: true });
+  })();
+</script>
 </body>
 </html>
