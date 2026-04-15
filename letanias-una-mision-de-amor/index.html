@@ -1365,20 +1365,24 @@
               </div>
               <div class="card" style="background: rgba(255,255,255,0.92); padding: 14px 14px 12px;">
                 <h3>Espacios posibles</h3>
-                <div class="tags" style="margin-top: 10px; gap: 8px;">
+                <div class="tags" style="margin-top: 10px; gap: 6px;">
                   <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Parroquias</span>
                   <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Colegios</span>
                   <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Universidades</span>
+                  <span class="tag" style="background: rgba(216,166,73,0.14); color: #946a19;">Empresas</span>
                   <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Movimientos</span>
                   <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Retiros</span>
                   <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Diócesis</span>
+                  <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Cámaras de comercio</span>
+                  <span class="tag" style="background: rgba(31,166,173,0.12); color: var(--teal-deep);">Agremiaciones</span>
+                  <span class="tag" style="background: rgba(16,37,44,0.06); color: var(--ink-soft);">Otras entidades</span>
                 </div>
               </div>
               <div class="panel" style="background: rgba(255,255,255,0.88); padding: 14px 14px 12px;">
                 <h3>Flexible en forma, claro en intención</h3>
                 <p>
-                  Puede realizarse en iglesia, auditorio, teatro o salón parroquial sin perder el foco espiritual. Funciona especialmente bien donde una comunidad necesita
-                  <strong>renovar la vida de oración</strong>, reunir familias o abrir un espacio de sanación.
+                  Puede realizarse en iglesia, auditorio, teatro, salón parroquial o espacios institucionales sin perder el foco espiritual. Funciona especialmente bien donde una comunidad,
+                  empresa, universidad o agremiación necesita <strong>renovar la vida de oración</strong>, reunir personas o abrir un espacio de sanación.
                 </p>
               </div>
             </div>
@@ -1554,10 +1558,13 @@
     const DESIGN_WIDTH = 1460;
     const DESIGN_HEIGHT = 821.25;
     const FRAME_PADDING = 48;
-    const umaGallery = Array.from({ length: 32 }, (_, index) => ({
-      src: `assets/uma-gallery-${String(index + 1).padStart(2, "0")}.jpeg`,
-      alt: `Jhonathan Loaiza durante un evento de Una Misión de Amor ${index + 1}`
-    }));
+    const umaGallery = Array.from({ length: 27 }, (_, index) => {
+      const assetNumber = String(index + 6).padStart(2, "0");
+      return {
+        src: `assets/uma-gallery-${assetNumber}.jpeg`,
+        alt: `Jhonathan Loaiza durante un evento de Una Misión de Amor ${index + 1}`
+      };
+    });
 
     const mountUmaGallery = () => {
       document.querySelectorAll('[data-gallery="uma-events"]').forEach((node) => {
